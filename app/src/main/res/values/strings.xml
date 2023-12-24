@@ -1,14 +1,18 @@
 <resources>
-    <string name="app_name">Electronic bulletin board</string>
+    <string name="app_name">Advertisement board</string>
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
 
     <string name="buttonSave">Save</string>
-    
+    <string name="button_login">Log in</string>
+
     <string name="label_category">Category</string>
     <string name="label_title">Title</string>
     <string name="label_description">Description</string>
     <string name="label_URL">Your URL</string>
     <string name="label_contact">Your contacts</string>
     <string name="label_apps">Images</string>
+    <string name="label_login">Login</string>
+    <string name="label_password">Password</string>
+    <string name="label_user_name">Name</string>
 </resources>
