@@ -1,4 +1,4 @@
-package com.advertisementboard;
+package com.advertisementboard.account;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
 import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
@@ -72,17 +73,19 @@ public class LoginDialogFragment extends DialogFragment {
                     public void onResponse(Call<AuthenticationResponseDto> call, Response<AuthenticationResponseDto> response) {
                         if(response.code() == 200) {
                             AppConfiguration.token().setToken(response.body().getToken());
-                            Snackbar.make(coordinatorLayout, "Auth + ", Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
+                            Log.i("Login", "Authorization completed");
+                            Snackbar.make(coordinatorLayout, getString(R.string.auth_success), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
                         }
                         else {
-                            Snackbar.make(coordinatorLayout, "Auth - ", Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
+                            Log.i("Login", "Authorization failed with code " + response.code());
+                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
                         }
                     }
 
                     @Override
                     public void onFailure(Call<AuthenticationResponseDto> call, Throwable t) {
-                        Log.i("Login", "Failed");
-                        Snackbar.make(coordinatorLayout, "Auth - ", Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
+                        Log.e("Login", "No connection");
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_connection), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
 
 
                     }

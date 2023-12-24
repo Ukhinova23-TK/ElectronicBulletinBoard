@@ -15,4 +15,7 @@
     <string name="label_login">Login</string>
     <string name="label_password">Password</string>
     <string name="label_user_name">Name</string>
+    <string name="auth_success">Authorized successfully</string>
+    <string name="auth_failed">Wrong credentials</string>
+    <string name="no_connection">No connection to server</string>
 </resources>
