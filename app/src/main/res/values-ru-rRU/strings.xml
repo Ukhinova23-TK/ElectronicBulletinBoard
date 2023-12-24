@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Доска объявлений</string>
+    <string name="action_login">Вход</string>
+    <string name="action_logout">Выход</string>
+    <string name="buttonSave">Сохранить</string>
+    <string name="button_login">Войти</string>
+    <string name="label_category">Категория</string>
+    <string name="label_title">Заголовок</string>
+    <string name="label_description">Описание</string>
+    <string name="label_URL">Ваш URL</string>
+    <string name="label_contact">Ваши контакты</string>
+    <string name="label_apps">Изображения</string>
+    <string name="label_login">Логин</string>
+    <string name="label_password">Пароль</string>
+    <string name="label_user_name">Имя</string>
+    <string name="auth_success">Успешная авторизация</string>
+    <string name="auth_failed">Неверные данные</string>
+    <string name="no_connection">Нет соединения с сервером</string>
+</resources>

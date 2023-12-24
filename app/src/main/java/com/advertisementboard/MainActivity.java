@@ -7,19 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
-import com.advertisementboard.config.AppConfiguration;
-import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
-import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
-import com.advertisementboard.data.dto.user.UserDto;
+import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.io.IOException;
-
-import retrofit2.Response;
-
 
 public class MainActivity extends AppCompatActivity
     implements CategoriesFragment.CategoriesFragmentListener {
@@ -70,6 +62,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_login) {
+            LoginDialogFragment fragment = new LoginDialogFragment();
+            fragment.show(getSupportFragmentManager(), "Login dialog");
             return true;
         }
 
