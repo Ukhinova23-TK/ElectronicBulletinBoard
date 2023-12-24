@@ -7,10 +7,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
+import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
+import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
+
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity
     implements CategoriesFragment.CategoriesFragmentListener {

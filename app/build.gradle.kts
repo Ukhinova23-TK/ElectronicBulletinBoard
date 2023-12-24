@@ -32,19 +32,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-    packaging {
-        resources.pickFirsts += "META-INF/spring.tooling"
-        resources.pickFirsts += "META-INF/INDEX.LIST"
-        resources.pickFirsts += "META-INF/spring.handlers"
-        resources.pickFirsts += "META-INF/spring-configuration-metadata.json"
-        resources.pickFirsts += "META-INF/additional-spring-configuration-metadata.json"
-        resources.pickFirsts += "META-INF/spring.factories"
-        resources.pickFirsts += "META-INF/spring.schemas"
-        resources.pickFirsts += "META-INF/license.txt"
-        resources.pickFirsts += "META-INF/DEPENDENCIES"
-        resources.pickFirsts += "META-INF/notice.txt"
-        resources.pickFirsts += "META-INF/spring/aot.factories"
-    }
 }
 
 dependencies {
@@ -59,9 +46,9 @@ dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("org.springframework.boot:spring-boot-starter:3.2.1")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
     compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
