@@ -5,7 +5,7 @@
     android:id="@+id/nestedScrollViewCategories"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CategoriesFragment" >
+    tools:context=".categories.CategoriesFragment" >
 
     <FrameLayout
         android:id="@+id/frameLayoutCategories"

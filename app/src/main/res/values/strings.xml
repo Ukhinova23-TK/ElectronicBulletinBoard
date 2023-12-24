@@ -18,4 +18,5 @@
     <string name="auth_success">Authorized successfully</string>
     <string name="auth_failed">Wrong credentials</string>
     <string name="no_connection">No connection to server</string>
+    <string name="categories_failed">Error loading categories</string>
 </resources>
