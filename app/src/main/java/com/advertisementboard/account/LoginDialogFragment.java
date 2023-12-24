@@ -74,20 +74,18 @@ public class LoginDialogFragment extends DialogFragment {
                         if(response.code() == 200) {
                             AppConfiguration.token().setToken(response.body().getToken());
                             Log.i("Login", "Authorization completed");
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_success), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
+                            Snackbar.make(coordinatorLayout, R.string.auth_success, Snackbar.LENGTH_SHORT).show();
                         }
                         else {
                             Log.i("Login", "Authorization failed with code " + response.code());
-                            Snackbar.make(coordinatorLayout, getString(R.string.auth_failed), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
+                            Snackbar.make(coordinatorLayout, R.string.auth_failed, Snackbar.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<AuthenticationResponseDto> call, Throwable t) {
                         Log.e("Login", "No connection");
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_connection), Snackbar.LENGTH_SHORT).show(); //TODO сообщение в ресурсы
-
-
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
