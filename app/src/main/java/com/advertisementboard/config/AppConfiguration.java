@@ -3,6 +3,8 @@ package com.advertisementboard.config;
 import static java.util.Objects.isNull;
 
 import com.advertisementboard.client.AccountClient;
+import com.advertisementboard.client.AdvertisementClient;
+import com.advertisementboard.client.CategoryClient;
 import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
 import com.google.gson.Gson;
 
@@ -19,6 +21,10 @@ public class AppConfiguration {
     private static AuthInterceptor authInterceptor;
 
     private static AccountClient accountClient;
+
+    private static CategoryClient categoryClient;
+
+    private static AdvertisementClient advertisementClient;
 
     private static final String BASE_URL = "http://192.168.0.102:8080/";
 
@@ -55,6 +61,20 @@ public class AppConfiguration {
             accountClient = retrofit().create(AccountClient.class);
         }
         return accountClient;
+    }
+
+    public static CategoryClient categoryClient() {
+        if(isNull(categoryClient)) {
+            categoryClient = retrofit().create(CategoryClient.class);
+        }
+        return categoryClient;
+    }
+
+    public static AdvertisementClient advertisementClient() {
+        if (isNull(advertisementClient)) {
+            advertisementClient = retrofit().create(AdvertisementClient.class);
+        }
+        return advertisementClient;
     }
 
 }
