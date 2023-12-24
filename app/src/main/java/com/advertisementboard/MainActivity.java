@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.advertisementboard.account.LoginDialogFragment;
+import com.advertisementboard.categories.CategoriesFragment;
 import com.advertisementboard.databinding.ActivityMainBinding;
 
 import android.view.Menu;
