@@ -1,4 +1,4 @@
-package com.example.electronicbulletinboard;
+package com.advertisementboard;
 
 import org.junit.Test;
 

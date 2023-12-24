@@ -1,7 +1,5 @@
-package com.example.electronicbulletinboard;
+package com.advertisementboard;
 
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +7,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.electronicbulletinboard.databinding.FragmentCategoriesBinding;
+import com.advertisementboard.databinding.FragmentCategoriesBinding;
 
 import java.util.ArrayList;
 import java.util.List;

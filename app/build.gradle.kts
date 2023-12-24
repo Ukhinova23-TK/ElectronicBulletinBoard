@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.electronicbulletinboard"
+    namespace = "com.advertisementboard"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.electronicbulletinboard"
+        applicationId = "com.advertisementboard"
         minSdk = 29
         targetSdk = 33
         versionCode = 1
@@ -26,11 +26,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         viewBinding = true
+    }
+    packaging {
+        resources.pickFirsts += "META-INF/spring.tooling"
+        resources.pickFirsts += "META-INF/INDEX.LIST"
+        resources.pickFirsts += "META-INF/spring.handlers"
+        resources.pickFirsts += "META-INF/spring-configuration-metadata.json"
+        resources.pickFirsts += "META-INF/additional-spring-configuration-metadata.json"
+        resources.pickFirsts += "META-INF/spring.factories"
+        resources.pickFirsts += "META-INF/spring.schemas"
+        resources.pickFirsts += "META-INF/license.txt"
+        resources.pickFirsts += "META-INF/DEPENDENCIES"
+        resources.pickFirsts += "META-INF/notice.txt"
+        resources.pickFirsts += "META-INF/spring/aot.factories"
     }
 }
 
@@ -44,8 +57,10 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.core:core:1.12.0")
     implementation("androidx.gridlayout:gridlayout:1.0.0")
-    implementation("org.springframework.boot:spring-boot-starter-web:3.2.1")
-    implementation("io.github.openfeign:feign-core:13.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("org.springframework.boot:spring-boot-starter:3.2.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
     compileOnly("org.projectlombok:lombok:1.18.30")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
