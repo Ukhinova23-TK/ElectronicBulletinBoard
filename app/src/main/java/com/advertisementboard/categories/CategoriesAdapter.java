@@ -1,4 +1,4 @@
-package com.advertisementboard;
+package com.advertisementboard.categories;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +8,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.advertisementboard.R;
+import com.advertisementboard.data.dto.category.CategoryDto;
+
 import java.util.List;
 
-public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.CategoryHolder> {
 
     // Переменные экземпляров ContactsAdapter
-    //private Cursor cursor = null;
     private final CategoriesClickListener clickListener;
 
     // Временное хранилище категорий
-    private List<String> categoryList;
+    private List<CategoryDto> categoryList;
 
     public interface CategoriesClickListener {
         void onClick(String category);
@@ -25,30 +27,24 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
 
     // Вложенный субкласс RecyclerView.ViewHolder используется
     // для реализации паттерна View–Holder в контексте RecyclerView
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView textView;
-        private int position;
+    public class CategoryHolder extends RecyclerView.ViewHolder {
+
+        final TextView nameTextView;
+
+        final TextView descriptionTextView;
 
         // Настройка объекта ViewHolder элемента RecyclerView
-        public ViewHolder(View itemView) {
+        public CategoryHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(android.R.id.text1);
 
-            // Присоединение слушателя к itemView
-            itemView.setOnClickListener(
-                    new View.OnClickListener() {
-                        // Выполняется при щелчке на контакте в ViewHolder
-                        @Override
-                        public void onClick(View view) {
-                            clickListener.onClick(categoryList.get(position));
-                        }
-                    }
-            );
+            nameTextView = itemView.findViewById(R.id.categoryName);
+            descriptionTextView = itemView.findViewById(R.id.categoryDescription);
+
         }
     }
 
     // Конструктор
-    public CategoriesAdapter(CategoriesClickListener clickListener, List<String> categoryList) {
+    public CategoriesAdapter(CategoriesClickListener clickListener, List<CategoryDto> categoryList) {
         this.clickListener = clickListener;
         this.categoryList = categoryList;
     }
@@ -56,19 +52,20 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     // Подготовка нового элемента списка и его объекта ViewHolder
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CategoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Заполнение макета android.R.layout.simple_list_item_1
         View view = LayoutInflater.from(parent.getContext()).inflate(
-                android.R.layout.simple_list_item_1, parent, false);
+                R.layout.category_list_item, parent, false);
         // ViewHolder текущего элемента
-        return new ViewHolder(view);
+        return new CategoryHolder(view);
     }
 
     // Назначает текст элемента списка
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        String category = categoryList.get(position);
-        holder.textView.setText(category);
+    public void onBindViewHolder(CategoryHolder holder, int position) {
+        CategoryDto category = categoryList.get(position);
+        holder.nameTextView.setText(category.getName());
+        holder.descriptionTextView.setText(category.getDescription());
     }
 
     // Возвращает количество элементов, предоставляемых адаптером
@@ -77,9 +74,4 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
         return categoryList.size();
     }
 
-    // Текущий объект Cursor адаптера заменяется новым
-    public void swapList(List<String> categories) {
-        //this.cursor = cursor;
-        notifyDataSetChanged();
-    }
 }

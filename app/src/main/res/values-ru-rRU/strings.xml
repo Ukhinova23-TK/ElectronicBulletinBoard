@@ -17,4 +17,5 @@
     <string name="auth_success">Успешная авторизация</string>
     <string name="auth_failed">Неверные данные</string>
     <string name="no_connection">Нет соединения с сервером</string>
+    <string name="categories_failed">Ошибка загрузки категорий</string>
 </resources>
