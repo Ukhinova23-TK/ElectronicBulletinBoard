@@ -1,4 +1,4 @@
-package com.example.electronicbulletinboard;
+package com.advertisementboard;
 
 import android.content.Context;
 

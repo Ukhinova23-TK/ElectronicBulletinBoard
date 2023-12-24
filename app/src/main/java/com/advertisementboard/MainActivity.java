@@ -1,25 +1,25 @@
-package com.example.electronicbulletinboard;
+package com.advertisementboard;
 
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.core.view.WindowCompat;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
-import com.example.electronicbulletinboard.databinding.ActivityMainBinding;
+import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
+import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
+import com.advertisementboard.data.dto.user.UserDto;
+import com.advertisementboard.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.io.IOException;
+
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity
     implements CategoriesFragment.CategoriesFragmentListener {
