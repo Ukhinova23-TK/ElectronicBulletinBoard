@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".account.LoginDialogFragment">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/loginTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="@color/primaryText"
+        app:boxStrokeColor="@color/darkPrimaryColor"
+        app:counterTextColor="@color/darkPrimaryColor"
+        app:endIconTint="@color/darkPrimaryColor"
+        app:helperTextTextColor="@color/darkPrimaryColor"
+        app:hintTextColor="@color/darkPrimaryColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/loginTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/label_login"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="@color/primaryText"
+        app:boxStrokeColor="@color/darkPrimaryColor"
+        app:counterTextColor="@color/darkPrimaryColor"
+        app:endIconTint="@color/darkPrimaryColor"
+        app:helperTextTextColor="@color/darkPrimaryColor"
+        app:hintTextColor="@color/darkPrimaryColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/nameTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_user_name"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="@color/primaryText"
+        app:boxStrokeColor="@color/darkPrimaryColor"
+        app:counterTextColor="@color/darkPrimaryColor"
+        app:endIconTint="@color/darkPrimaryColor"
+        app:helperTextTextColor="@color/darkPrimaryColor"
+        app:hintTextColor="@color/darkPrimaryColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_password"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/doublePasswordTextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="@color/primaryText"
+        app:boxStrokeColor="@color/darkPrimaryColor"
+        app:counterTextColor="@color/darkPrimaryColor"
+        app:endIconTint="@color/darkPrimaryColor"
+        app:helperTextTextColor="@color/darkPrimaryColor"
+        app:hintTextColor="@color/darkPrimaryColor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/doublePasswordTextInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/label_double_password"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/checkTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|center_horizontal"
+        android:textColor="@color/accentColor"
+        android:visibility="invisible" />
+
+</LinearLayout>

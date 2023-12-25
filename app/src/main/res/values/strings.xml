@@ -2,9 +2,12 @@
     <string name="app_name">Advertisement board</string>
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
+    <string name="action_registration">Registration</string>
 
     <string name="buttonSave">Save</string>
     <string name="button_login">Log in</string>
+    <string name="button_registration">Registration</string>
+    <string name="button_cancel">Cancel</string>
 
     <string name="label_category">Category</string>
     <string name="label_title">Title</string>
@@ -15,6 +18,15 @@
     <string name="label_login">Login</string>
     <string name="label_password">Password</string>
     <string name="label_user_name">Name</string>
+    <string name="label_double_password">Double password</string>
+
+    <string name="link_registration">Registration</string>
+
+    <string name="message_match_passwords">Passwords don\'t match</string>
+    <string name="message_empty_input">Not all fields are filled in</string>
+
+    <string name="registration_success">Registration successfully</string>
+    <string name="registration_failed">Registration failed</string>
     <string name="auth_success">Authorized successfully</string>
     <string name="auth_failed">Wrong credentials</string>
     <string name="no_connection">No connection to server</string>
