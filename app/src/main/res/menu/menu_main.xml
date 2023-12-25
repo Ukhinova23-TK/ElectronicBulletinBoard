@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.advertisementboard.MainActivity">
     <item
+        android:id="@+id/action_registration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/person_24"
+        android:title="@string/action_registration"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

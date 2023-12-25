@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.advertisementboard.account.LoginDialogFragment;
+import com.advertisementboard.account.RegistrationDialogFragment;
 import com.advertisementboard.categories.CategoriesFragment;
 import com.advertisementboard.databinding.ActivityMainBinding;
 
@@ -65,6 +66,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_login) {
             LoginDialogFragment fragment = new LoginDialogFragment();
             fragment.show(getSupportFragmentManager(), "Login dialog");
+            return true;
+        }
+        if(id == R.id.action_registration) {
+            RegistrationDialogFragment fragment = new RegistrationDialogFragment();
+            fragment.show(getSupportFragmentManager(), "Registration dialog");
             return true;
         }
 
