@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
@@ -29,6 +30,8 @@ public class LoginDialogFragment extends DialogFragment {
     private TextInputLayout loginTextInputLayout;
     private TextInputLayout passwordTextInputLayout;
 
+    private TextView registration;
+
     private CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -40,8 +43,8 @@ public class LoginDialogFragment extends DialogFragment {
                 R.layout.fragment_login, null);
         builder.setView(loginDialogView);
 
-        loginTextInputLayout = loginDialogView.findViewById(R.id.loginTextInputLayout);
-        passwordTextInputLayout = loginDialogView.findViewById(R.id.passwordTextInputLayout);
+        loginTextInputLayout = loginDialogView.findViewById(R.id.nameTextInputLayout);
+        passwordTextInputLayout = loginDialogView.findViewById(R.id.doublePasswordTextInputLayout);
 
         coordinatorLayout = getActivity().findViewById(R.id.coordinatorLayout);
 
@@ -50,8 +53,16 @@ public class LoginDialogFragment extends DialogFragment {
                 R.string.button_login,
                 (DialogInterface.OnClickListener) (dialog, id) -> login()
         );
-        builder.setNegativeButton(android.R.string.cancel, null);
+
+        builder.setNegativeButton(R.string.button_cancel, null);
         return builder.create();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.darkPrimaryColor));
+        ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.darkPrimaryColor));
     }
 
     @Override

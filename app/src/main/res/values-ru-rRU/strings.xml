@@ -5,6 +5,7 @@
     <string name="action_logout">Выход</string>
     <string name="buttonSave">Сохранить</string>
     <string name="button_login">Войти</string>
+    <string name="button_cancel">Отмена</string>
     <string name="label_category">Категория</string>
     <string name="label_title">Заголовок</string>
     <string name="label_description">Описание</string>
@@ -18,4 +19,12 @@
     <string name="auth_failed">Неверные данные</string>
     <string name="no_connection">Нет соединения с сервером</string>
     <string name="categories_failed">Ошибка загрузки категорий</string>
+    <string name="label_double_password">Повторите пароль</string>
+    <string name="link_registration">Регистрация</string>
+    <string name="button_registration">Зарегистрироваться</string>
+    <string name="message_match_passwords">Пароли не совпадают</string>
+    <string name="registration_success">Успешная регистрация</string>
+    <string name="registration_failed">Ошибка регистрации</string>
+    <string name="message_empty_input">Не все поля заполнены</string>
+    <string name="action_registration">Регистрация</string>
 </resources>
