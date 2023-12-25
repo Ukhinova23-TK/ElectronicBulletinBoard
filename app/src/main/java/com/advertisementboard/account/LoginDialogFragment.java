@@ -30,8 +30,6 @@ public class LoginDialogFragment extends DialogFragment {
     private TextInputLayout loginTextInputLayout;
     private TextInputLayout passwordTextInputLayout;
 
-    private TextView registration;
-
     private CoordinatorLayout coordinatorLayout;
 
     @Override
