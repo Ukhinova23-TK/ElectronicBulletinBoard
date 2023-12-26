@@ -32,4 +32,6 @@
     <string name="auth_failed">Wrong credentials</string>
     <string name="no_connection">No connection to server</string>
     <string name="categories_failed">Error loading categories</string>
+    <string name="error_during_saving">Error during saving</string>
+    <string name="successful_saving">Successful saving</string>
 </resources>

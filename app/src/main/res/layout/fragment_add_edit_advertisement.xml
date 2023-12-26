@@ -80,16 +80,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/applicationsTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="@string/label_apps" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
         </LinearLayout>
     </ScrollView>
 

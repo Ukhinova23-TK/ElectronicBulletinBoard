@@ -1,5 +1,6 @@
-package com.advertisementboard;
+package com.advertisementboard.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -8,15 +9,15 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.R;
 import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
-import com.advertisementboard.categories.CategoriesAdapter;
-import com.advertisementboard.categories.CategoriesFragment;
+import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
 
         recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
@@ -131,10 +134,18 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(Call<UserDto> call, Response<UserDto> response) {
                         if(response.code() == 200) {
                             Log.i("Account", "The user is logged in");
-                            loggedIn = true;
+                            if(response.body() != null) {
+                                updateUser(response.body());
+                                loggedIn = true;
+                            }
+                            else {
+                                updateUser(UserDto.builder().build());
+                                loggedIn = false;
+                            }
                         }
                         else {
                             Log.i("Account", "The user is not logged in " + response.code());
+                            updateUser(UserDto.builder().build());
                             loggedIn = false;
                         }
                         updateButtonsMenu(menu);
@@ -166,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                         if(response.code() == 200) {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
-                                    category -> {},
+                                    category -> onClickCategory(category),
                                     response.body()
                             );
 
@@ -184,5 +195,20 @@ public class MainActivity extends AppCompatActivity
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void onClickCategory(CategoryDto categoryDto) {
+        Intent intent = new Intent(this, AdvertisementsActivity.class);
+        intent.putExtra("categoryId", categoryDto.getId());
+        intent.putExtra("categoryName", categoryDto.getName());
+        startActivity(intent);
+    }
+
+    private void updateUser(UserDto user) {
+        UserDto configUser = AppConfiguration.user();
+        configUser.setLogin(user.getLogin());
+        configUser.setName(user.getName());
+        configUser.setPassword(user.getPassword());
+        configUser.setRole(user.getRole());
     }
 }
