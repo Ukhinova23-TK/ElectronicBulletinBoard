@@ -1,4 +1,4 @@
-package com.advertisementboard;
+package com.advertisementboard.decoration;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

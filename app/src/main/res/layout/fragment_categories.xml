@@ -5,16 +5,17 @@
     android:id="@+id/nestedScrollViewCategories"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".categories.CategoriesFragment" >
+    tools:context=".fragment.CategoriesFragment" >
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/frameLayoutCategories"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewCategories"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerViewCategories"
+            />
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

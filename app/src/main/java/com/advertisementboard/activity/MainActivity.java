@@ -1,41 +1,46 @@
-package com.advertisementboard;
+package com.advertisementboard.activity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.ui.AppBarConfiguration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.R;
 import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
-import com.advertisementboard.categories.CategoriesFragment;
+import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
-import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
-import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
+import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.databinding.ActivityMainBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-    implements CategoriesFragment.CategoriesFragmentListener, DialogListener {
+    implements  DialogListener {
 
-    private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
     boolean loggedIn = false;
 
-    private CategoriesFragment categoriesFragment; // Вывод категорий
+    private CategoriesAdapter categoriesAdapter; // Адаптер для recyclerView
+
+    private RecyclerView recyclerViewCategories;
+
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +48,24 @@ public class MainActivity extends AppCompatActivity
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.toolbar);
 
-        categoriesFragment = new CategoriesFragment();
-        FragmentTransaction transaction =
-                getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.fragmentContainer, categoriesFragment);
-        transaction.commit();
+        recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
-        /*binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        // recyclerView выводит элементы в вертикальном списке
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        recyclerViewCategories.setLayoutManager(layoutManager);
+
+        loadCategories();
+
+        // Присоединение ItemDecorator для вывода разделителей
+        recyclerViewCategories.addItemDecoration(new ItemDivider(this));
+
+        recyclerViewCategories.setHasFixedSize(false);
+
     }
 
     @Override
@@ -99,11 +105,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp();
-    }
-
-    @Override
-    public void onCategorySelected(String category) {
-
     }
 
     private void updateButtonsMenu(Menu menu){
@@ -155,5 +156,37 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
         invalidateOptionsMenu();
+    }
+
+    private void loadCategories() {
+        AppConfiguration.categoryClient().getCategories()
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<List<CategoryDto>> call, Response<List<CategoryDto>> response) {
+                        if(response.code() == 200) {
+                            // создание адаптера recyclerView и слушателя щелчков на элементах
+                            categoriesAdapter = new CategoriesAdapter(
+                                    category -> onClickCategory(category),
+                                    response.body()
+                            );
+
+                            recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
+                        }
+                        else {
+                            Log.i("Categories", "Fetching categories failed with code " + response.code());
+                            Snackbar.make(coordinatorLayout, R.string.categories_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CategoryDto>> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void onClickCategory(CategoryDto categoryDto) {
+        Log.e("", categoryDto.getName());
     }
 }
