@@ -3,6 +3,7 @@
     <string name="action_login">Login</string>
     <string name="action_logout">Logout</string>
     <string name="action_registration">Registration</string>
+    <string name="action_exit">Exit</string>
 
     <string name="buttonSave">Save</string>
     <string name="button_login">Log in</string>

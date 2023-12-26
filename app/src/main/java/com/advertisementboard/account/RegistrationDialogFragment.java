@@ -2,6 +2,7 @@ package com.advertisementboard.account;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 
@@ -27,13 +29,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegistrationDialogFragment extends DialogFragment {
-
     private TextInputLayout loginTextInputLayout;
     private TextInputLayout nameTextInputLayout;
     private TextInputLayout passwordTextInputLayout;
     private TextInputLayout doublePasswordTextInputLayout;
 
     private TextView check;
+
+    public DialogListener listener;
 
     private CoordinatorLayout coordinatorLayout;
 
@@ -99,8 +102,23 @@ public class RegistrationDialogFragment extends DialogFragment {
                 (DialogInterface.OnClickListener) (dialog, id) -> registration()
         );
 
-        builder.setNegativeButton(R.string.button_cancel, null);
+        builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the negative button event back to the host activity.
+                listener.onDialogNegativeClick(RegistrationDialogFragment.this);
+            }
+        });
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (DialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.toString());
+        }
     }
 
     @Override
@@ -160,6 +178,7 @@ public class RegistrationDialogFragment extends DialogFragment {
                         public void onResponse(Call<AuthenticationResponseDto> call, Response<AuthenticationResponseDto> response) {
                             if (response.code() == 200) {
                                 AppConfiguration.token().setToken(response.body().getToken());
+                                listener.onDialogPositiveClick(RegistrationDialogFragment.this);
                                 Log.i("Registration", "Registration completed");
                                 Snackbar.make(coordinatorLayout, R.string.registration_success, Snackbar.LENGTH_SHORT).show();
                             } else {

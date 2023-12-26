@@ -2,9 +2,11 @@ package com.advertisementboard.account;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 
@@ -32,6 +34,8 @@ public class LoginDialogFragment extends DialogFragment {
 
     private CoordinatorLayout coordinatorLayout;
 
+    public DialogListener listener;
+
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
         AlertDialog.Builder builder =
@@ -52,8 +56,23 @@ public class LoginDialogFragment extends DialogFragment {
                 (DialogInterface.OnClickListener) (dialog, id) -> login()
         );
 
-        builder.setNegativeButton(R.string.button_cancel, null);
+        builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Send the negative button event back to the host activity.
+                listener.onDialogNegativeClick(LoginDialogFragment.this);
+            }
+        });
         return builder.create();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            listener = (DialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(e.toString());
+        }
     }
 
     @Override
@@ -82,6 +101,7 @@ public class LoginDialogFragment extends DialogFragment {
                     public void onResponse(Call<AuthenticationResponseDto> call, Response<AuthenticationResponseDto> response) {
                         if(response.code() == 200) {
                             AppConfiguration.token().setToken(response.body().getToken());
+                            listener.onDialogPositiveClick(LoginDialogFragment.this);
                             Log.i("Login", "Authorization completed");
                             Snackbar.make(coordinatorLayout, R.string.auth_success, Snackbar.LENGTH_SHORT).show();
                         }
