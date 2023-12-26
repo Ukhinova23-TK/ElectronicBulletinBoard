@@ -1,5 +1,6 @@
 package com.advertisementboard.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+
+        coordinatorLayout = findViewById(R.id.coordinatorLayout);
 
         recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
@@ -187,6 +190,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void onClickCategory(CategoryDto categoryDto) {
-        Log.e("", categoryDto.getName());
+        Intent intent = new Intent(this, AdvertisementsActivity.class);
+        intent.putExtra("categoryId", categoryDto.getId());
+        intent.putExtra("categoryName", categoryDto.getName());
+        startActivity(intent);
     }
 }
