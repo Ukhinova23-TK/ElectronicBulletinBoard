@@ -29,17 +29,12 @@ import retrofit2.Response;
 
 public class LoginDialogFragment extends DialogFragment {
 
-    public interface LoginDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
-    }
-
     private TextInputLayout loginTextInputLayout;
     private TextInputLayout passwordTextInputLayout;
 
     private CoordinatorLayout coordinatorLayout;
 
-    public LoginDialogListener listener;
+    public DialogListener listener;
 
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
@@ -57,13 +52,9 @@ public class LoginDialogFragment extends DialogFragment {
 
         builder.setMessage(R.string.action_login);
         builder.setPositiveButton(
-                R.string.button_login,new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Send the positive button event back to the host activity.
-                        login();
-                        //listener.onDialogPositiveClick(LoginDialogFragment.this);
-                    }
-                });
+                R.string.button_login,
+                (DialogInterface.OnClickListener) (dialog, id) -> login()
+        );
 
         builder.setNegativeButton(R.string.button_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -78,7 +69,7 @@ public class LoginDialogFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         try {
-            listener = (LoginDialogListener) context;
+            listener = (DialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(e.toString());
         }

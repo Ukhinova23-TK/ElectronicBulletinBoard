@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
 import com.advertisementboard.categories.CategoriesFragment;
@@ -27,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-    implements CategoriesFragment.CategoriesFragmentListener, LoginDialogFragment.LoginDialogListener{
+    implements CategoriesFragment.CategoriesFragmentListener, DialogListener {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
