@@ -16,6 +16,7 @@
             android:id="@+id/relativeLayoutImageAdvertisement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             app:layout_column="0"
             app:layout_columnSpan="2"
             app:layout_row="0"
@@ -23,9 +24,11 @@
 
             <ImageView
                 android:id="@+id/imageViewAdvertisement"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="center" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:foregroundGravity="center_horizontal"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/icon_font_bee" />
         </RelativeLayout>
 
         <TextView
