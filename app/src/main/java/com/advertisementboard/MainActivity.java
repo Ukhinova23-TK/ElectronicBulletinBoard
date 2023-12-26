@@ -4,22 +4,35 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
 import com.advertisementboard.categories.CategoriesFragment;
+import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.authentication.AuthenticationRequestDto;
+import com.advertisementboard.data.dto.authentication.AuthenticationResponseDto;
+import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity
-    implements CategoriesFragment.CategoriesFragmentListener {
+    implements CategoriesFragment.CategoriesFragmentListener, LoginDialogFragment.LoginDialogListener{
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    boolean loggedIn = false;
 
     private CategoriesFragment categoriesFragment; // Вывод категорий
 
@@ -52,6 +65,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        checkAccount(menu);
         return true;
     }
 
@@ -73,6 +87,10 @@ public class MainActivity extends AppCompatActivity
             fragment.show(getSupportFragmentManager(), "Registration dialog");
             return true;
         }
+        if(id == R.id.action_exit) {
+            AppConfiguration.token().setToken(null);
+            invalidateOptionsMenu();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -87,7 +105,54 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void updateMenu(){
+    private void updateButtonsMenu(Menu menu){
+        MenuItem menuItemLogin = menu.findItem(R.id.action_login);
+        MenuItem menuItemRegistration = menu.findItem(R.id.action_registration);
+        MenuItem menuItemExit = menu.findItem(R.id.action_exit);
+        if(loggedIn){
+            menuItemLogin.setVisible(false);
+            menuItemRegistration.setVisible(false);
+            menuItemExit.setVisible(true);
+        }
+        else{
+            menuItemLogin.setVisible(true);
+            menuItemRegistration.setVisible(true);
+            menuItemExit.setVisible(false);
+        }
+    }
 
+    private void checkAccount(Menu menu){
+        AppConfiguration.accountClient()
+                .getAccount()
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<UserDto> call, Response<UserDto> response) {
+                        if(response.code() == 200) {
+                            Log.i("Account", "The user is logged in");
+                            loggedIn = true;
+                        }
+                        else {
+                            Log.i("Account", "The user is not logged in " + response.code());
+                            loggedIn = false;
+                        }
+                        updateButtonsMenu(menu);
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserDto> call, Throwable t) {
+                        Log.e("Account", "No connection");
+                        loggedIn = false;
+                    }
+                });
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        invalidateOptionsMenu();
     }
 }
