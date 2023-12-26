@@ -1,4 +1,4 @@
-package com.advertisementboard.categories;
+package com.advertisementboard.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

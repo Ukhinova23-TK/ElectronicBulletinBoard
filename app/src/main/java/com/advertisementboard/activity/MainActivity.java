@@ -16,7 +16,7 @@ import com.advertisementboard.R;
 import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
-import com.advertisementboard.categories.CategoriesAdapter;
+import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
