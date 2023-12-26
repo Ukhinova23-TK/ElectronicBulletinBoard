@@ -2,11 +2,17 @@ package com.advertisementboard.data.dto.user;
 
 import com.advertisementboard.data.dto.role.RoleDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
     private String login;

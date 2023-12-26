@@ -2,6 +2,7 @@ package com.advertisementboard.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -14,8 +15,8 @@ import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageRequestDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageResponseDto;
 import com.advertisementboard.databinding.ActivityAdvertisementsBinding;
-import com.advertisementboard.databinding.ActivityMainBinding;
 import com.advertisementboard.decoration.ItemDivider;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
@@ -25,13 +26,13 @@ import retrofit2.Response;
 public class AdvertisementsActivity extends AppCompatActivity {
     private ActivityAdvertisementsBinding binding;
 
-    boolean loggedIn = false;
-
     private AdvertisementsAdapter advertisementsAdapter; // Адаптер для recyclerView
 
     private RecyclerView recyclerViewAdvertisements;
 
     private CoordinatorLayout coordinatorLayout;
+
+    private FloatingActionButton addAdvertisementButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,11 @@ public class AdvertisementsActivity extends AppCompatActivity {
         coordinatorLayout = findViewById(R.id.advertisementCoordinatorLayout);
 
         recyclerViewAdvertisements = findViewById(R.id.recyclerViewAdvertisements);
+
+        addAdvertisementButton = findViewById(R.id.addAdvertisementButton);
+        if(AppConfiguration.user().getLogin() == null) {
+            addAdvertisementButton.setVisibility(View.INVISIBLE);
+        }
 
         // recyclerView выводит элементы в вертикальном списке
 
@@ -103,6 +109,7 @@ public class AdvertisementsActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 
 }

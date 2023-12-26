@@ -9,6 +9,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutAdvertisements"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,5 +18,14 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerViewAdvertisements"
             />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addAdvertisementButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="@dimen/category_margin"
+            android:layout_marginBottom="@dimen/category_margin"
+            android:clickable="true"
+            android:src="@drawable/baseline_create_24" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -134,10 +134,18 @@ public class MainActivity extends AppCompatActivity
                     public void onResponse(Call<UserDto> call, Response<UserDto> response) {
                         if(response.code() == 200) {
                             Log.i("Account", "The user is logged in");
-                            loggedIn = true;
+                            if(response.body() != null) {
+                                updateUser(response.body());
+                                loggedIn = true;
+                            }
+                            else {
+                                updateUser(UserDto.builder().build());
+                                loggedIn = false;
+                            }
                         }
                         else {
                             Log.i("Account", "The user is not logged in " + response.code());
+                            updateUser(UserDto.builder().build());
                             loggedIn = false;
                         }
                         updateButtonsMenu(menu);
@@ -194,5 +202,13 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("categoryId", categoryDto.getId());
         intent.putExtra("categoryName", categoryDto.getName());
         startActivity(intent);
+    }
+
+    private void updateUser(UserDto user) {
+        UserDto configUser = AppConfiguration.user();
+        configUser.setLogin(user.getLogin());
+        configUser.setName(user.getName());
+        configUser.setPassword(user.getPassword());
+        configUser.setRole(user.getRole());
     }
 }
