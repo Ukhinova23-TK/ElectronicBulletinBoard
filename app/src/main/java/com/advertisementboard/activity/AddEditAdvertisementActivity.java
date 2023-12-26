@@ -3,14 +3,16 @@ package com.advertisementboard.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.NavUtils;
 
 import com.advertisementboard.R;
-import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.advertisement.AdvertisementRequestDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,6 +39,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private Spinner categorySpinner;
 
+    private Button saveButton;
+
     private List<CategoryDto> categoryList;
 
     @Override
@@ -53,6 +57,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         urlTextInputLayout = findViewById(R.id.urlTextInputLayout);
         contactsTextInputLayout = findViewById(R.id.contactsTextInputLayout);
         categorySpinner = findViewById(R.id.categorySpinner);
+        saveButton = findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(view -> save());
 
         coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
 
@@ -89,7 +95,36 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
     }
 
     private void save() {
+        AppConfiguration.advertisementClient()
+                .createAdvertisement(
+                        AdvertisementRequestDto.builder()
+                                .heading(titleTextInputLayout.getEditText().getText().toString())
+                                .text(descriptionTextInputLayout.getEditText().getText().toString())
+                                .url(urlTextInputLayout.getEditText().getText().toString())
+                                .contacts(contactsTextInputLayout.getEditText().getText().toString())
+                                .categoryId(categoryList.get(categorySpinner.getSelectedItemPosition()).getId())
+                                .build()
+                )
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        if(response.code() == 201) {
+                            Log.e("Advertisement", "Successful saving");
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            NavUtils.navigateUpFromSameTask(getParent());
+                        }
+                        else {
+                            Log.e("Advertisement", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

@@ -28,4 +28,6 @@
     <string name="message_empty_input">Не все поля заполнены</string>
     <string name="action_registration">Регистрация</string>
     <string name="action_exit">Выход</string>
+    <string name="error_during_saving">Ошибка во время сохранения</string>
+    <string name="successful_saving">Успешное сохранение</string>
 </resources>
