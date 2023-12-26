@@ -22,7 +22,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     private List<CategoryDto> categoryList;
 
     public interface CategoriesClickListener {
-        void onClick(String category);
+        void onClick(CategoryDto category);
     }
 
     // Вложенный субкласс RecyclerView.ViewHolder используется
@@ -33,12 +33,16 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
         final TextView descriptionTextView;
 
+        CategoryDto category;
+
         // Настройка объекта ViewHolder элемента RecyclerView
         public CategoryHolder(View itemView) {
             super(itemView);
 
             nameTextView = itemView.findViewById(R.id.categoryName);
             descriptionTextView = itemView.findViewById(R.id.categoryDescription);
+
+            itemView.setOnClickListener(view -> clickListener.onClick(category));
 
         }
     }
@@ -66,6 +70,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
         CategoryDto category = categoryList.get(position);
         holder.nameTextView.setText(category.getName());
         holder.descriptionTextView.setText(category.getDescription());
+        holder.category = category;
     }
 
     // Возвращает количество элементов, предоставляемых адаптером

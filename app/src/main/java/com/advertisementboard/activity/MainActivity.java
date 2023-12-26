@@ -1,4 +1,4 @@
-package com.advertisementboard;
+package com.advertisementboard.activity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,15 +8,15 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.R;
 import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.account.LoginDialogFragment;
 import com.advertisementboard.account.RegistrationDialogFragment;
 import com.advertisementboard.categories.CategoriesAdapter;
-import com.advertisementboard.categories.CategoriesFragment;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity
                         if(response.code() == 200) {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
-                                    category -> {},
+                                    category -> onClickCategory(category),
                                     response.body()
                             );
 
@@ -184,5 +184,9 @@ public class MainActivity extends AppCompatActivity
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void onClickCategory(CategoryDto categoryDto) {
+        Log.e("", categoryDto.getName());
     }
 }
