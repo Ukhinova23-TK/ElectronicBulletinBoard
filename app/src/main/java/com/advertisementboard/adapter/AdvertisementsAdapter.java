@@ -1,8 +1,10 @@
 package com.advertisementboard.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
 import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
-import com.advertisementboard.data.dto.category.CategoryDto;
+import com.advertisementboard.data.enumeration.AdvertisementStatus;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
     // Временное хранилище категорий
     private List<AdvertisementDto> advertisementList;
 
+    private Context context;
+
     public interface AdvertisementsClickListener {
         void onClick(AdvertisementDto advertisement);
     }
@@ -32,6 +36,8 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
 
         final TextView advertisementName;
 
+        final ImageView statusImageView;
+
         AdvertisementDto advertisement;
 
         // Настройка объекта ViewHolder элемента RecyclerView
@@ -39,6 +45,7 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
             super(itemView);
 
             advertisementName = itemView.findViewById(R.id.advertisementName);
+            statusImageView = itemView.findViewById(R.id.statusImageView);
 
             itemView.setOnClickListener(view -> clickListener.onClick(advertisement));
 
@@ -46,9 +53,14 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
     }
 
     // Конструктор
-    public AdvertisementsAdapter(AdvertisementsAdapter.AdvertisementsClickListener clickListener, List<AdvertisementDto> advertisementList) {
+    public AdvertisementsAdapter(
+            AdvertisementsAdapter.AdvertisementsClickListener clickListener,
+            List<AdvertisementDto> advertisementList,
+            Context context
+    ) {
         this.clickListener = clickListener;
         this.advertisementList = advertisementList;
+        this.context = context;
     }
 
     // Подготовка нового элемента списка и его объекта ViewHolder
@@ -68,6 +80,12 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
         AdvertisementDto advertisement = advertisementList.get(position);
         holder.advertisementName.setText(advertisement.getHeading());
         holder.advertisement = advertisement;
+        if(advertisement.getStatus() == AdvertisementStatus.CONFIRMED) {
+            holder.statusImageView.setColorFilter(context.getResources().getColor(R.color.primaryColor));
+        }
+        else if(advertisement.getStatus() == AdvertisementStatus.REJECTED) {
+            holder.statusImageView.setColorFilter(context.getResources().getColor(R.color.redColor));
+        }
     }
 
     // Возвращает количество элементов, предоставляемых адаптером
