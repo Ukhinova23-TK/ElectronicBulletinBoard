@@ -1,5 +1,6 @@
 package com.advertisementboard.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +50,10 @@ public class AdvertisementsActivity extends AppCompatActivity {
         recyclerViewAdvertisements = findViewById(R.id.recyclerViewAdvertisements);
 
         addAdvertisementButton = findViewById(R.id.addAdvertisementButton);
+        addAdvertisementButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, AddEditAdvertisementActivity.class);
+            startActivity(intent);
+        });
         if(AppConfiguration.user().getLogin() == null) {
             addAdvertisementButton.setVisibility(View.INVISIBLE);
         }
@@ -91,7 +96,8 @@ public class AdvertisementsActivity extends AppCompatActivity {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             advertisementsAdapter = new AdvertisementsAdapter(
                                     advertisement -> {},
-                                    response.body().getAdvertisements()
+                                    response.body().getAdvertisements(),
+                                    getBaseContext()
                             );
 
                             recyclerViewAdvertisements.setAdapter(advertisementsAdapter); // Назначение адаптера

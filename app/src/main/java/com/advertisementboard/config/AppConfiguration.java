@@ -29,7 +29,7 @@ public class AppConfiguration {
 
     private static AdvertisementClient advertisementClient;
 
-    private static final String BASE_URL = "http://192.168.0.102:8080/";
+    private static final String BASE_URL = "http://192.168.0.106:8080/";
 
     public static AuthenticationResponseDto token() {
         if(isNull(token)) {

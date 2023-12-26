@@ -19,4 +19,9 @@ public class CategoryDto {
 
     private String description;
 
+    @androidx.annotation.NonNull
+    @Override
+    public String toString() {
+        return name;
+    }
 }
