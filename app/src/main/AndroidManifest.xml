@@ -51,6 +51,19 @@
                 android:value="com.advertisementboard.activity.AdvertisementsActivity"
                 />
         </activity>
+
+        <activity
+            android:name=".activity.ViewActivity"
+            android:exported="true"
+            android:label="@string/view"
+            android:theme="@style/Theme.ElectronicBulletinBoard"
+            android:parentActivityName=".activity.AdvertisementsActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.advertisementboard.activity.AdvertisementsActivity"
+                />
+        </activity>
     </application>
 
 </manifest>

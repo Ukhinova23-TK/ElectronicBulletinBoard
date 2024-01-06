@@ -6,6 +6,8 @@
     <string name="buttonSave">Сохранить</string>
     <string name="button_login">Войти</string>
     <string name="button_cancel">Отмена</string>
+    <string name="view">Просмотр объявления</string>
+
     <string name="label_category">Категория</string>
     <string name="label_title">Заголовок</string>
     <string name="label_description">Описание</string>
