@@ -1,5 +1,7 @@
 package com.advertisementboard.activity;
 
+import static java.util.Objects.nonNull;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -12,12 +14,14 @@ import androidx.core.app.NavUtils;
 
 import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementRequestDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
@@ -43,6 +47,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private List<CategoryDto> categoryList;
 
+    private AdvertisementDto advertisement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +64,30 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         contactsTextInputLayout = findViewById(R.id.contactsTextInputLayout);
         categorySpinner = findViewById(R.id.categorySpinner);
         saveButton = findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(view -> save());
 
         coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
 
         loadCategories();
+
+        if(nonNull(getIntent().getExtras())
+                && getIntent().getExtras().containsKey("advertisement")) {
+            Object advertisementObject = getIntent().getExtras().get("advertisement");
+            if(advertisementObject instanceof AdvertisementDto) {
+                advertisement = (AdvertisementDto) advertisementObject;
+                titleTextInputLayout.getEditText().setText(advertisement.getHeading());
+                descriptionTextInputLayout.getEditText().setText(advertisement.getText());
+                urlTextInputLayout.getEditText().setText(advertisement.getUrl());
+                contactsTextInputLayout.getEditText().setText(advertisement.getContacts());
+            }
+        }
+
+        saveButton.setOnClickListener(view -> {
+            if (advertisement == null) {
+                save();
+            } else {
+                update();
+            }
+        });
     }
 
     @Override
@@ -121,7 +146,42 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Long> call, Throwable t) {
-                        Log.e("Categories", "No connection");
+                        Log.e("Advertisement", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void update() {
+        AppConfiguration.advertisementClient()
+                .updateAdvertisement(
+                        AdvertisementRequestDto.builder()
+                                .id(advertisement.getId())
+                                .heading(titleTextInputLayout.getEditText().getText().toString())
+                                .text(descriptionTextInputLayout.getEditText().getText().toString())
+                                .url(urlTextInputLayout.getEditText().getText().toString())
+                                .contacts(contactsTextInputLayout.getEditText().getText().toString())
+                                .categoryId(categoryList.get(categorySpinner.getSelectedItemPosition()).getId())
+                                .build()
+                )
+                .enqueue(new Callback<>() {
+
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Log.e("Advertisement", "Successful saving");
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            NavUtils.navigateUpFromSameTask(getParent());
+                        }
+                        else {
+                            Log.e("Advertisement", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Advertisement", "No connection");
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
