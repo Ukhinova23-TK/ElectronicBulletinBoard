@@ -66,8 +66,6 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
 
-        loadCategories();
-
         if(nonNull(getIntent().getExtras())
                 && getIntent().getExtras().containsKey("advertisement")) {
             Object advertisementObject = getIntent().getExtras().get("advertisement");
@@ -79,6 +77,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                 contactsTextInputLayout.getEditText().setText(advertisement.getContacts());
             }
         }
+
+        loadCategories();
 
         saveButton.setOnClickListener(view -> {
             if (advertisement == null) {
@@ -103,6 +103,9 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                             categoryList = response.body();
                             ArrayAdapter<CategoryDto> adapter = new ArrayAdapter<>(getBaseContext(), R.layout.spinner, categoryList);
                             categorySpinner.setAdapter(adapter);
+                            if(nonNull(advertisement)) {
+                                categorySpinner.setSelection(categoryList.indexOf(categoryList.stream().filter(category -> category.getId().equals(advertisement.getCategory().getId())).findFirst().orElseThrow()));
+                            }
                         }
                         else {
                             Log.i("Categories", "Fetching categories failed with code " + response.code());
@@ -135,7 +138,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                         if(response.code() == 201) {
                             Log.e("Advertisement", "Successful saving");
                             Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
-                            NavUtils.navigateUpFromSameTask(getParent());
+                            navigate();
                         }
                         else {
                             Log.e("Advertisement", "Error during saving");
@@ -170,7 +173,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                         if(response.code() == 200) {
                             Log.e("Advertisement", "Successful saving");
                             Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
-                            NavUtils.navigateUpFromSameTask(getParent());
+                            navigate();
                         }
                         else {
                             Log.e("Advertisement", "Error during saving");
@@ -184,6 +187,10 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void navigate() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 
 }

@@ -32,8 +32,6 @@ public class ViewActivity extends AppCompatActivity {
 
         binding = ActivityViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setSupportActionBar(binding.viewToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         titleLabelTextView = findViewById(R.id.titleLabelTextView);
         descriptionLabelTextView = findViewById(R.id.descriptionLabelTextView);
@@ -50,6 +48,9 @@ public class ViewActivity extends AppCompatActivity {
                 descriptionLabelTextView.setText(advertisement.getText());
                 urlLabelTextView.setText(advertisement.getUrl());
                 contactsLabelTextView.setText(advertisement.getContacts());
+                binding.viewToolbar.setTitle(advertisement.getCategory().getName());
+                setSupportActionBar(binding.viewToolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         }
 
