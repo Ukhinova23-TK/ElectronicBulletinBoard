@@ -96,6 +96,8 @@ public class AdvertisementsActivity extends AppCompatActivity {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             advertisementsAdapter = new AdvertisementsAdapter(
                                     advertisement -> {},
+                                    advertisement -> {},
+                                    advertisement -> {},
                                     response.body().getAdvertisements(),
                                     getBaseContext()
                             );
