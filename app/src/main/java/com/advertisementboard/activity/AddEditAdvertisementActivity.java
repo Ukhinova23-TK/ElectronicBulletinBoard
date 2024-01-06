@@ -21,7 +21,6 @@ import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
