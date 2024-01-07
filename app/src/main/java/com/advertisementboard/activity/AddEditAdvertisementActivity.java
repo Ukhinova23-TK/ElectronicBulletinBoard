@@ -108,8 +108,6 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
             }
         }
 
-        loadCategories();
-
         saveButton.setOnClickListener(view -> {
             if (advertisement == null) {
                 save();
