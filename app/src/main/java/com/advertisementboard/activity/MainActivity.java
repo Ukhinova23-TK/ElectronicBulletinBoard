@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
         recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
         // recyclerView выводит элементы в вертикальном списке
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -68,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         recyclerViewCategories.addItemDecoration(new ItemDivider(this));
 
         recyclerViewCategories.setHasFixedSize(false);
-
     }
 
     @Override

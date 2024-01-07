@@ -1,5 +1,6 @@
 package com.advertisementboard.activity;
 
+import android.content.Intent;
 import static java.util.Objects.nonNull;
 
 import android.os.Bundle;
@@ -11,13 +12,17 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NavUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
+import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementRequestDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
+import com.advertisementboard.decoration.ItemDivider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -48,6 +53,10 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private AdvertisementDto advertisement;
 
+    private RecyclerView recyclerViewCategories;
+
+    private CategoriesAdapter categoriesAdapter; // Адаптер для recyclerView
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,14 +66,31 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         setSupportActionBar(binding.addEditToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
+        if(savedInstanceState == null &&
+                findViewById(R.id.fragmentCategories) != null) {
+            recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+
+            // recyclerView выводит элементы в вертикальном списке
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+            recyclerViewCategories.setLayoutManager(layoutManager);
+
+            loadCategories();
+
+            // Присоединение ItemDecorator для вывода разделителей
+            recyclerViewCategories.addItemDecoration(new ItemDivider(this));
+
+            recyclerViewCategories.setHasFixedSize(false);
+        }
+
         titleTextInputLayout = findViewById(R.id.titleTextInputLayout);
         descriptionTextInputLayout = findViewById(R.id.descriptionTextInputLayout);
         urlTextInputLayout = findViewById(R.id.urlTextInputLayout);
         contactsTextInputLayout = findViewById(R.id.contactsTextInputLayout);
         categorySpinner = findViewById(R.id.categorySpinner);
         saveButton = findViewById(R.id.saveButton);
-
-        coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
 
         if(nonNull(getIntent().getExtras())
                 && getIntent().getExtras().containsKey("advertisement")) {
@@ -87,6 +113,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                 update();
             }
         });
+        loadCategoriesSpiner();
     }
 
     @Override
@@ -94,7 +121,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         return super.onSupportNavigateUp();
     }
 
-    private void loadCategories() {
+    private void loadCategoriesSpiner() {
         AppConfiguration.categoryClient().getCategories()
                 .enqueue(new Callback<>() {
                     @Override
@@ -187,6 +214,41 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void loadCategories() {
+        AppConfiguration.categoryClient().getCategories()
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<List<CategoryDto>> call, Response<List<CategoryDto>> response) {
+                        if(response.code() == 200) {
+                            // создание адаптера recyclerView и слушателя щелчков на элементах
+                            categoriesAdapter = new CategoriesAdapter(
+                                    category -> onClickCategory(category),
+                                    response.body()
+                            );
+
+                            recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
+                        }
+                        else {
+                            Log.i("Categories", "Fetching categories failed with code " + response.code());
+                            Snackbar.make(coordinatorLayout, R.string.categories_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CategoryDto>> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void onClickCategory(CategoryDto categoryDto) {
+        Intent intent = new Intent(this, AdvertisementsActivity.class);
+        intent.putExtra("categoryId", categoryDto.getId());
+        intent.putExtra("categoryName", categoryDto.getName());
+        startActivity(intent);
     }
 
     private void navigate() {
