@@ -1,5 +1,7 @@
 package com.advertisementboard.adapter;
 
+import static java.util.Objects.nonNull;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +13,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
+import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
+import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.data.enumeration.AdvertisementStatus;
+import com.advertisementboard.data.enumeration.UserRole;
 
 import java.util.List;
 
 public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAdapter.AdvertisementHolder> {
 
-    // Переменные экземпляров ContactsAdapter
     private final AdvertisementsAdapter.AdvertisementsClickListener clickListener;
+
+    private final AdvertisementsAdapter.AdvertisementsClickListener editClickListener;
+
+    private final AdvertisementsAdapter.AdvertisementsClickListener deleteClickListener;
 
     // Временное хранилище категорий
     private List<AdvertisementDto> advertisementList;
@@ -38,6 +46,10 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
 
         final ImageView statusImageView;
 
+        final ImageView updateImageView;
+
+        final ImageView deleteImageView;
+
         AdvertisementDto advertisement;
 
         // Настройка объекта ViewHolder элемента RecyclerView
@@ -46,19 +58,26 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
 
             advertisementName = itemView.findViewById(R.id.advertisementName);
             statusImageView = itemView.findViewById(R.id.statusImageView);
+            updateImageView = itemView.findViewById(R.id.updateImageView);
+            deleteImageView = itemView.findViewById(R.id.deleteImageView);
 
             itemView.setOnClickListener(view -> clickListener.onClick(advertisement));
-
+            updateImageView.setOnClickListener(view -> editClickListener.onClick(advertisement));
+            deleteImageView.setOnClickListener(view -> deleteClickListener.onClick(advertisement));
         }
     }
 
     // Конструктор
     public AdvertisementsAdapter(
             AdvertisementsAdapter.AdvertisementsClickListener clickListener,
+            AdvertisementsAdapter.AdvertisementsClickListener editClickListener,
+            AdvertisementsAdapter.AdvertisementsClickListener deleteClickListener,
             List<AdvertisementDto> advertisementList,
             Context context
     ) {
         this.clickListener = clickListener;
+        this.editClickListener = editClickListener;
+        this.deleteClickListener = deleteClickListener;
         this.advertisementList = advertisementList;
         this.context = context;
     }
@@ -85,6 +104,23 @@ public class AdvertisementsAdapter extends RecyclerView.Adapter<AdvertisementsAd
         }
         else if(advertisement.getStatus() == AdvertisementStatus.REJECTED) {
             holder.statusImageView.setColorFilter(context.getResources().getColor(R.color.redColor));
+        }
+        if(nonNull(advertisement)) {
+
+            UserDto currentUser = AppConfiguration.user();
+
+            boolean isOperationsVisible = nonNull(currentUser.getRole())
+                    && nonNull(currentUser.getRole().getName())
+                    && (currentUser.getRole().getName().equals(UserRole.ADMINISTRATOR.name())
+                    || advertisement.getUser().getLogin().equals(currentUser.getLogin()));
+
+            holder.updateImageView.setVisibility(isOperationsVisible ? View.VISIBLE : View.INVISIBLE);
+            holder.deleteImageView.setVisibility(isOperationsVisible ? View.VISIBLE : View.INVISIBLE);
+
+        }
+        else {
+            holder.updateImageView.setVisibility(View.INVISIBLE);
+            holder.deleteImageView.setVisibility(View.INVISIBLE);
         }
     }
 

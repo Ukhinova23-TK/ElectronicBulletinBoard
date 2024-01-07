@@ -3,9 +3,16 @@
     <string name="app_name">Доска объявлений</string>
     <string name="action_login">Вход</string>
     <string name="action_logout">Выход</string>
+    <string name="action_confirm">Подтвердить</string>
+    <string name="action_reject">Отклонить</string>
+    <string name="action_delete">Удаление</string>
     <string name="buttonSave">Сохранить</string>
     <string name="button_login">Войти</string>
     <string name="button_cancel">Отмена</string>
+    <string name="button_delete">Удалить</string>
+
+    <string name="view">Просмотр объявления</string>
+    <string name="label_delete">Вы уверены, что хотите удалить?</string>
     <string name="label_category">Категория</string>
     <string name="label_title">Заголовок</string>
     <string name="label_description">Описание</string>
@@ -30,4 +37,10 @@
     <string name="action_exit">Выход</string>
     <string name="error_during_saving">Ошибка во время сохранения</string>
     <string name="successful_saving">Успешное сохранение</string>
+    <string name="confirmed">Объявление подтверждено</string>
+    <string name="confirm_error">Ошибка при подтверждении</string>
+    <string name="rejected">Объявление отклонено</string>
+    <string name="reject_error">Ошибка при отклонении</string>
+    <string name="error_during_deleting">Ошибка при удалении</string>
+    <string name="successful_deleting">Успешное удаление</string>
 </resources>
