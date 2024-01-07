@@ -7,18 +7,24 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
 import com.advertisementboard.adapter.AdvertisementsAdapter;
+import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageRequestDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageResponseDto;
+import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAdvertisementsBinding;
 import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.fragment.AdvertisementsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,9 +33,13 @@ import retrofit2.Response;
 public class AdvertisementsActivity extends AppCompatActivity {
     private ActivityAdvertisementsBinding binding;
 
+    private CategoriesAdapter categoriesAdapter; // Адаптер для recyclerView
+
     private AdvertisementsAdapter advertisementsAdapter; // Адаптер для recyclerView
 
     private RecyclerView recyclerViewAdvertisements;
+
+    private RecyclerView recyclerViewCategories;
 
     private CoordinatorLayout coordinatorLayout;
 
@@ -46,6 +56,26 @@ public class AdvertisementsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         coordinatorLayout = findViewById(R.id.advertisementCoordinatorLayout);
+        if(savedInstanceState == null &&
+                findViewById(R.id.fragmentAdvertisements) != null) {
+            recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+
+            // recyclerView выводит элементы в вертикальном списке
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+            recyclerViewCategories.setLayoutManager(layoutManager);
+
+            loadCategories();
+
+            // Присоединение ItemDecorator для вывода разделителей
+            recyclerViewCategories.addItemDecoration(new ItemDivider(this));
+
+            recyclerViewCategories.setHasFixedSize(false);
+        }
+        else{
+            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         recyclerViewAdvertisements = findViewById(R.id.recyclerViewAdvertisements);
 
@@ -116,6 +146,39 @@ public class AdvertisementsActivity extends AppCompatActivity {
                 });
     }
 
+    private void loadCategories() {
+        AppConfiguration.categoryClient().getCategories()
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(Call<List<CategoryDto>> call, Response<List<CategoryDto>> response) {
+                        if(response.code() == 200) {
+                            // создание адаптера recyclerView и слушателя щелчков на элементах
+                            categoriesAdapter = new CategoriesAdapter(
+                                    category -> onClickCategory(category),
+                                    response.body()
+                            );
 
+                            recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
+                        }
+                        else {
+                            Log.i("Categories", "Fetching categories failed with code " + response.code());
+                            Snackbar.make(coordinatorLayout, R.string.categories_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<CategoryDto>> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void onClickCategory(CategoryDto categoryDto) {
+        Intent intent = new Intent(this, AdvertisementsActivity.class);
+        intent.putExtra("categoryId", categoryDto.getId());
+        intent.putExtra("categoryName", categoryDto.getName());
+        startActivity(intent);
+    }
 
 }
