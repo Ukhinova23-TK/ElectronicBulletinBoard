@@ -22,6 +22,7 @@ import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.databinding.ActivityMainBinding;
+import com.advertisementboard.fragment.DeleteDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity
                             loggedIn = false;
                         }
                         updateButtonsMenu(menu);
+                        categoriesAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -178,6 +180,21 @@ public class MainActivity extends AppCompatActivity
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
                                     category -> onClickCategory(category),
+                                    category -> {},
+                                    category -> {
+                                        DeleteDialogFragment fragment = new DeleteDialogFragment(
+                                                new DialogListener() {
+                                                    @Override
+                                                    public void onDialogPositiveClick(DialogFragment dialog) {
+                                                        deleteCategory(category.getId());
+                                                    }
+
+                                                    @Override
+                                                    public void onDialogNegativeClick(DialogFragment dialog) {}
+                                                }
+                                        );
+                                        fragment.show(getSupportFragmentManager(), "Delete advertisement");
+                                    },
                                     response.body()
                             );
 
@@ -210,5 +227,29 @@ public class MainActivity extends AppCompatActivity
         configUser.setName(user.getName());
         configUser.setPassword(user.getPassword());
         configUser.setRole(user.getRole());
+    }
+
+    private void deleteCategory(Long id) {
+        AppConfiguration.categoryClient().deleteCategory(id).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_deleting, Snackbar.LENGTH_SHORT).show();
+                            loadCategories();
+                        }
+                        else {
+                            Log.e("Categories", "Error during deleting");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_deleting, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 }
