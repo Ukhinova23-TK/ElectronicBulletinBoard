@@ -7,7 +7,6 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +21,6 @@ import com.advertisementboard.data.dto.advertisement.AdvertisementPageResponseDt
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAdvertisementsBinding;
 import com.advertisementboard.decoration.ItemDivider;
-import com.advertisementboard.fragment.AdvertisementsFragment;
 import com.advertisementboard.fragment.DeleteDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -60,7 +58,7 @@ public class AdvertisementsActivity extends AppCompatActivity {
 
         coordinatorLayout = findViewById(R.id.advertisementCoordinatorLayout);
         if(savedInstanceState == null &&
-                findViewById(R.id.fragmentAdvertisements) != null) {
+                findViewById(R.id.fragmentCategories) != null) {
             recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
 
             // recyclerView выводит элементы в вертикальном списке
@@ -75,9 +73,6 @@ public class AdvertisementsActivity extends AppCompatActivity {
             recyclerViewCategories.addItemDecoration(new ItemDivider(this));
 
             recyclerViewCategories.setHasFixedSize(false);
-        }
-        else{
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         recyclerViewAdvertisements = findViewById(R.id.recyclerViewAdvertisements);
@@ -177,7 +172,7 @@ public class AdvertisementsActivity extends AppCompatActivity {
                 .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(Call<List<CategoryDto>> call, Response<List<CategoryDto>> response) {
-                        if(response.code() == 200) {
+                        if (response.code() == 200) {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
                                     category -> onClickCategory(category),
@@ -185,12 +180,20 @@ public class AdvertisementsActivity extends AppCompatActivity {
                             );
 
                             recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
-                        }
-                        else {
+                        } else {
                             Log.i("Categories", "Fetching categories failed with code " + response.code());
                             Snackbar.make(coordinatorLayout, R.string.categories_failed, Snackbar.LENGTH_SHORT).show();
                         }
                     }
+                    @Override
+                    public void onFailure(Call<List<CategoryDto>> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+
     private void delete(Long id) {
         AppConfiguration.advertisementClient().deleteAdvertisement(id).enqueue(
                 new Callback<>() {
@@ -213,14 +216,6 @@ public class AdvertisementsActivity extends AppCompatActivity {
                     }
                 }
         );
-    }
-
-                    @Override
-                    public void onFailure(Call<List<CategoryDto>> call, Throwable t) {
-                        Log.e("Categories", "No connection");
-                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
-                    }
-                });
     }
 
     private void onClickCategory(CategoryDto categoryDto) {

@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity
         recyclerViewCategories.addItemDecoration(new ItemDivider(this));
 
         recyclerViewCategories.setHasFixedSize(false);
-
     }
 
     @Override
