@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -27,6 +28,8 @@ import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
 import com.advertisementboard.decoration.ItemDivider;
 import com.advertisementboard.fragment.AddEditCategoryFragment;
 import com.advertisementboard.fragment.DeleteDialogFragment;
+import com.advertisementboard.util.RoleUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -62,6 +65,9 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private CategoriesAdapter categoriesAdapter; // Адаптер для recyclerView
 
+    private FloatingActionButton addCategoryButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +81,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         if(savedInstanceState == null &&
                 findViewById(R.id.fragmentCategories) != null) {
             recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+            addCategoryButton = findViewById(R.id.addCategoryButton);
+            addCategoryButton.setVisibility(RoleUtil.isAdministrator(AppConfiguration.user()) ? View.VISIBLE : View.INVISIBLE);
 
             // recyclerView выводит элементы в вертикальном списке
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);

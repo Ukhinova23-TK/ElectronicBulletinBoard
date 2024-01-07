@@ -28,6 +28,7 @@ import com.advertisementboard.decoration.ItemDivider;
 import com.advertisementboard.fragment.AddEditCategoryFragment;
 import com.advertisementboard.fragment.DeleteDialogFragment;
 import com.advertisementboard.util.RoleUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -60,6 +61,9 @@ public class ViewActivity extends AppCompatActivity {
 
     private CategoriesAdapter categoriesAdapter;
 
+    private FloatingActionButton addCategoryButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +76,8 @@ public class ViewActivity extends AppCompatActivity {
         if(savedInstanceState == null &&
             findViewById(R.id.fragmentCategories) != null){
             recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+            addCategoryButton = findViewById(R.id.addCategoryButton);
+            addCategoryButton.setVisibility(RoleUtil.isAdministrator(AppConfiguration.user()) ? View.VISIBLE : View.INVISIBLE);
 
             // recyclerView выводит элементы в вертикальном списке
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);

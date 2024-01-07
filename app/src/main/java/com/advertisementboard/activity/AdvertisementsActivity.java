@@ -51,6 +51,8 @@ public class AdvertisementsActivity extends AppCompatActivity {
 
     private FloatingActionButton addAdvertisementButton;
 
+    private FloatingActionButton addCategoryButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +67,8 @@ public class AdvertisementsActivity extends AppCompatActivity {
         if(savedInstanceState == null &&
                 findViewById(R.id.fragmentCategories) != null) {
             recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
+            addCategoryButton = findViewById(R.id.addCategoryButton);
+            addCategoryButton.setVisibility(RoleUtil.isAdministrator(AppConfiguration.user()) ? View.VISIBLE : View.INVISIBLE);
 
             // recyclerView выводит элементы в вертикальном списке
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
