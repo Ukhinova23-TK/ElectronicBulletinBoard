@@ -186,7 +186,10 @@ public class MainActivity extends AppCompatActivity
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
                                     category -> onClickCategory(category),
-                                    category -> {},
+                                    category -> {
+                                        AddEditCategoryFragment fragment = new AddEditCategoryFragment(MainActivity.this::updateCategory, category);
+                                        fragment.show(getSupportFragmentManager(), "Update category");
+                                    },
                                     category -> {
                                         DeleteDialogFragment fragment = new DeleteDialogFragment(
                                                 new DialogListener() {
@@ -252,6 +255,30 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public void onFailure(Call<Long> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    private void updateCategory(CategoryDto category) {
+        AppConfiguration.categoryClient().updateCategory(category).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            loadCategories();
+                        }
+                        else {
+                            Log.e("Categories", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
                         Log.e("Categories", "No connection");
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }

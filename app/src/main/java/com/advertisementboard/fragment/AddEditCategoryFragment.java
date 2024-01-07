@@ -56,6 +56,8 @@ public class AddEditCategoryFragment  extends DialogFragment {
         }
         else {
             builder.setMessage(R.string.update_category);
+            titleCategoryTextInputLayout.getEditText().setText(category.getName());
+            descriptionCategoryTextInputLayout.getEditText().setText(category.getDescription());
         }
 
         builder.setPositiveButton(
