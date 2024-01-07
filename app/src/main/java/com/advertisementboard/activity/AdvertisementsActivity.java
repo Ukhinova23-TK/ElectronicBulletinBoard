@@ -94,13 +94,17 @@ public class AdvertisementsActivity extends AppCompatActivity {
 
         recyclerViewAdvertisements.setLayoutManager(layoutManager);
 
-        loadAdvertisements((Long)getIntent().getExtras().get("categoryId"));
-
         // Присоединение ItemDecorator для вывода разделителей
         recyclerViewAdvertisements.addItemDecoration(new ItemDivider(this));
 
         recyclerViewAdvertisements.setHasFixedSize(false);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadAdvertisements((Long)getIntent().getExtras().get("categoryId"));
     }
 
     @Override
