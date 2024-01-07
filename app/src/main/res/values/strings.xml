@@ -6,14 +6,17 @@
     <string name="action_exit">Exit</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_reject">Reject</string>
+    <string name="action_delete">Deleting</string>
     <string name="view">Advertisement view</string>
 
     <string name="buttonSave">Save</string>
     <string name="button_login">Log in</string>
     <string name="button_registration">Registration</string>
     <string name="button_cancel">Cancel</string>
+    <string name="button_delete">Delete</string>
 
     <string name="label_category">Category</string>
+    <string name="label_delete">Are you sure you want to delete?</string>
     <string name="label_title">Title</string>
     <string name="label_description">Description</string>
     <string name="label_URL">Your URL</string>
@@ -40,5 +43,7 @@
     <string name="confirmed">Advertisement confirmed</string>
     <string name="confirm_error">Error confirming the advertisement</string>
     <string name="rejected">Advertisement rejected</string>
-    <string name="reject_error">Error rejecting the advertisement</string>
+    <string name="reject_error">Error rejecting the advertisement</string>\
+    <string name="error_during_deleting">Error during deleting</string>
+    <string name="successful_deleting">Successful deleting</string>
 </resources>

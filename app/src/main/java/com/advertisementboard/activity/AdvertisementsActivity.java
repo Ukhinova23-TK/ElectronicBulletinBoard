@@ -7,16 +7,19 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
+import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.adapter.AdvertisementsAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageRequestDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageResponseDto;
 import com.advertisementboard.databinding.ActivityAdvertisementsBinding;
 import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.fragment.DeleteDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -105,7 +108,20 @@ public class AdvertisementsActivity extends AppCompatActivity {
                                         intent.putExtra("advertisement", advertisement);
                                         startActivity(intent);
                                     },
-                                    advertisement -> {},
+                                    advertisement -> {
+                                        DeleteDialogFragment fragment = new DeleteDialogFragment(
+                                                new DialogListener() {
+                                                    @Override
+                                                    public void onDialogPositiveClick(DialogFragment dialog) {
+                                                        delete(advertisement.getId());
+                                                    }
+
+                                                    @Override
+                                                    public void onDialogNegativeClick(DialogFragment dialog) {}
+                                                }
+                                        );
+                                        fragment.show(getSupportFragmentManager(), "Delete advertisement");
+                                    },
                                     response.body().getAdvertisements(),
                                     getBaseContext()
                             );
@@ -126,6 +142,29 @@ public class AdvertisementsActivity extends AppCompatActivity {
                 });
     }
 
+    private void delete(Long id) {
+        AppConfiguration.advertisementClient().deleteAdvertisement(id).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_deleting, Snackbar.LENGTH_SHORT).show();
+                            loadAdvertisements((Long)getIntent().getExtras().get("categoryId"));
+                        }
+                        else {
+                            Log.e("Advertisements", "Error during deleting");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_deleting, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Advertisements", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 
 
 }
