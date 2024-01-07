@@ -30,6 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,7 +133,7 @@ public class AdvertisementsActivity extends AppCompatActivity {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             List<AdvertisementDto> advertisements = response.body().getAdvertisements();
                             if(!RoleUtil.isModerator(AppConfiguration.user())) {
-                                advertisements = advertisements.stream().filter(advertisementDto -> advertisementDto.getStatus() != AdvertisementStatus.REJECTED).toList();
+                                advertisements = advertisements.stream().filter(advertisementDto -> advertisementDto.getStatus() != AdvertisementStatus.REJECTED).collect(Collectors.toList());
                             }
                             advertisementsAdapter = new AdvertisementsAdapter(
                                     advertisement -> {
