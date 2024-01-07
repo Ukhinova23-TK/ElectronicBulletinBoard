@@ -24,9 +24,9 @@ public interface CategoryClient {
     Call<Long> createCategory(@Body CategoryDto category);
 
     @PUT("/api/categories")
-    Call<?> updateCategory(@Body CategoryDto category);
+    Call<Void> updateCategory(@Body CategoryDto category);
 
     @DELETE("/api/categories/{id}")
-    Call<CategoryDto> deleteCategory(@Path("id") long id);
+    Call<Void> deleteCategory(@Path("id") long id);
 
 }

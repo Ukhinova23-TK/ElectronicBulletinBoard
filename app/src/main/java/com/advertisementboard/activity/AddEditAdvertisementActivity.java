@@ -12,10 +12,12 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NavUtils;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.advertisementboard.R;
+import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
@@ -23,6 +25,8 @@ import com.advertisementboard.data.dto.advertisement.AdvertisementRequestDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
 import com.advertisementboard.decoration.ItemDivider;
+import com.advertisementboard.fragment.AddEditCategoryFragment;
+import com.advertisementboard.fragment.DeleteDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -225,6 +229,24 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
                             categoriesAdapter = new CategoriesAdapter(
                                     category -> onClickCategory(category),
+                                    category -> {
+                                        AddEditCategoryFragment fragment = new AddEditCategoryFragment(AddEditAdvertisementActivity.this::updateCategory, category);
+                                        fragment.show(getSupportFragmentManager(), "Update category");
+                                    },
+                                    category -> {
+                                        DeleteDialogFragment fragment = new DeleteDialogFragment(
+                                                new DialogListener() {
+                                                    @Override
+                                                    public void onDialogPositiveClick(DialogFragment dialog) {
+                                                        deleteCategory(category.getId());
+                                                    }
+
+                                                    @Override
+                                                    public void onDialogNegativeClick(DialogFragment dialog) {}
+                                                }
+                                        );
+                                        fragment.show(getSupportFragmentManager(), "Delete advertisement");
+                                    },
                                     response.body()
                             );
 
@@ -253,6 +275,77 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private void navigate() {
         NavUtils.navigateUpFromSameTask(this);
+    }
+
+    private void createCategory(CategoryDto category) {
+        AppConfiguration.categoryClient().createCategory(category).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        if(response.code() == 201) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            loadCategories();
+                        }
+                        else {
+                            Log.e("Categories", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    private void updateCategory(CategoryDto category) {
+        AppConfiguration.categoryClient().updateCategory(category).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            loadCategories();
+                        }
+                        else {
+                            Log.e("Categories", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    private void deleteCategory(Long id) {
+        AppConfiguration.categoryClient().deleteCategory(id).enqueue(
+                new Callback<>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.code() == 200) {
+                            Snackbar.make(coordinatorLayout, R.string.successful_deleting, Snackbar.LENGTH_SHORT).show();
+                            loadCategories();
+                        } else {
+                            Log.e("Categories", "Error during deleting");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_deleting, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Categories", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
 }
