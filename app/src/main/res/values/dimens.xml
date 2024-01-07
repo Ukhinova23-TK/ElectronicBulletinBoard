@@ -6,4 +6,5 @@
     <dimen name="category_margin">16dp</dimen>
     <dimen name="category_primary_text_size">20sp</dimen>
     <dimen name="category_secondary_text_size">16sp</dimen>
+    <dimen name="button_width">140dp</dimen>
 </resources>
