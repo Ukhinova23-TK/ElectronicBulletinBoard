@@ -1,7 +1,5 @@
 package com.advertisementboard.adapter;
 
-import static java.util.Objects.nonNull;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.category.CategoryDto;
-import com.advertisementboard.data.dto.user.UserDto;
-import com.advertisementboard.data.enumeration.UserRole;
+import com.advertisementboard.util.RoleUtil;
 
 import java.util.List;
 
@@ -90,13 +87,10 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     @Override
     public void onBindViewHolder(CategoryHolder holder, int position) {
         CategoryDto category = categoryList.get(position);
-        UserDto user = AppConfiguration.user();
         holder.nameTextView.setText(category.getName());
         holder.descriptionTextView.setText(category.getDescription());
         holder.category = category;
-        boolean isAdministrator = nonNull(user.getRole())
-                && nonNull(user.getRole().getName())
-                && user.getRole().getName().equals(UserRole.ADMINISTRATOR.name());
+        boolean isAdministrator = RoleUtil.isAdministrator(AppConfiguration.user());
         holder.updateCategoryImageView.setVisibility(isAdministrator ? View.VISIBLE : View.INVISIBLE);
         holder.deleteCategoryImageView.setVisibility(isAdministrator ? View.VISIBLE : View.INVISIBLE);
     }

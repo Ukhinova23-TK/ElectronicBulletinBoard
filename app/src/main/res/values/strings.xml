@@ -19,6 +19,8 @@
     <string name="label_delete">Are you sure you want to delete?</string>
     <string name="label_title">Title</string>
     <string name="label_description">Description</string>
+    <string name="label_category_title">Title</string>
+    <string name="label_category_description">Description</string>
     <string name="label_URL">Your URL</string>
     <string name="label_contact">Your contacts</string>
     <string name="label_apps">Images</string>
@@ -26,6 +28,8 @@
     <string name="label_password">Password</string>
     <string name="label_user_name">Name</string>
     <string name="label_double_password">Double password</string>
+    <string name="create_category">Category creating</string>
+    <string name="update_category">Category updating</string>
 
     <string name="link_registration">Registration</string>
 

@@ -14,10 +14,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
 import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
-import com.advertisementboard.data.dto.user.UserDto;
 import com.advertisementboard.data.enumeration.AdvertisementStatus;
-import com.advertisementboard.data.enumeration.UserRole;
 import com.advertisementboard.databinding.ActivityViewBinding;
+import com.advertisementboard.util.RoleUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
@@ -82,11 +81,8 @@ public class ViewActivity extends AppCompatActivity {
     }
 
     private void processButtons() {
-        UserDto user = AppConfiguration.user();
-        boolean isModerator = nonNull(user.getRole())
-                && nonNull(user.getRole().getName())
-                && (user.getRole().getName().equals(UserRole.MODERATOR.name())
-        || user.getRole().getName().equals(UserRole.ADMINISTRATOR.name()));
+
+        boolean isModerator = RoleUtil.isModerator(AppConfiguration.user());
 
         confirmButton.setVisibility(isModerator
                 && advertisement.getStatus() != AdvertisementStatus.CONFIRMED
