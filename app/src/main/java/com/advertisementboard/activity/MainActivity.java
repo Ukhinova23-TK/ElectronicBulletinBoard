@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
 
         recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
         addCategoryButton = findViewById(R.id.addCategoryButton);
+        addCategoryButton.setVisibility(View.INVISIBLE);
 
         addCategoryButton.setOnClickListener(view -> {
             AddEditCategoryFragment fragment = new AddEditCategoryFragment(this::createCategory);
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp();
     }
+
 
     private void updateButtonsMenu(Menu menu){
         MenuItem menuItemLogin = menu.findItem(R.id.action_login);

@@ -25,6 +25,7 @@
             android:layout_gravity="bottom|right"
             android:clickable="true"
             android:src="@drawable/icon_font_add"
+            android:visibility="invisible"
             app:backgroundTint="@color/accentColor"
             app:useCompatPadding="true" />
     </LinearLayout>
