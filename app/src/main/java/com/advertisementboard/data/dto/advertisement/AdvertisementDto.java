@@ -4,6 +4,9 @@ import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.data.dto.user.UserDto;
 
 import com.advertisementboard.data.enumeration.AdvertisementStatus;
+
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +17,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 @Builder
-public class AdvertisementDto {
+public class AdvertisementDto implements Serializable {
 
     private Long id;
 

@@ -32,15 +32,15 @@ public interface AdvertisementClient {
     Call<Long> createAdvertisement(@Body AdvertisementRequestDto request);
 
     @PUT("/api/advertisements")
-    Call<?> updateAdvertisement(@Body AdvertisementRequestDto request);
+    Call<Void> updateAdvertisement(@Body AdvertisementRequestDto request);
 
     @DELETE("/api/advertisements/{id}")
-    Call<?> deleteAdvertisement(@Path("id") long id);
+    Call<Void> deleteAdvertisement(@Path("id") long id);
 
     @PUT("/api/advertisements/{id}/reject")
-    Call<?> rejectAdvertisement(@Path("id") long id);
+    Call<Void> rejectAdvertisement(@Path("id") long id);
 
     @PUT("/api/advertisements/{id}/confirm")
-    Call<?> confirmAdvertisement(@Path("id") long id);
+    Call<Void> confirmAdvertisement(@Path("id") long id);
 
 }

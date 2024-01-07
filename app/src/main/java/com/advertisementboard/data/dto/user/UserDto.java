@@ -3,6 +3,8 @@ package com.advertisementboard.data.dto.user;
 import com.advertisementboard.data.dto.role.RoleDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
 
     private String login;
 

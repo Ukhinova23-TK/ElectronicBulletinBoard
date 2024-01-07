@@ -1,5 +1,7 @@
 package com.advertisementboard.activity;
 
+import static java.util.Objects.nonNull;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import androidx.core.app.NavUtils;
 
 import com.advertisementboard.R;
 import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementRequestDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
 import com.advertisementboard.databinding.ActivityAddEditAdvertisementBinding;
@@ -43,6 +46,8 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
     private List<CategoryDto> categoryList;
 
+    private AdvertisementDto advertisement;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +63,30 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
         contactsTextInputLayout = findViewById(R.id.contactsTextInputLayout);
         categorySpinner = findViewById(R.id.categorySpinner);
         saveButton = findViewById(R.id.saveButton);
-        saveButton.setOnClickListener(view -> save());
 
         coordinatorLayout = findViewById(R.id.addEditCoordinatorLayout);
 
+        if(nonNull(getIntent().getExtras())
+                && getIntent().getExtras().containsKey("advertisement")) {
+            Object advertisementObject = getIntent().getExtras().get("advertisement");
+            if(advertisementObject instanceof AdvertisementDto) {
+                advertisement = (AdvertisementDto) advertisementObject;
+                titleTextInputLayout.getEditText().setText(advertisement.getHeading());
+                descriptionTextInputLayout.getEditText().setText(advertisement.getText());
+                urlTextInputLayout.getEditText().setText(advertisement.getUrl());
+                contactsTextInputLayout.getEditText().setText(advertisement.getContacts());
+            }
+        }
+
         loadCategories();
+
+        saveButton.setOnClickListener(view -> {
+            if (advertisement == null) {
+                save();
+            } else {
+                update();
+            }
+        });
     }
 
     @Override
@@ -79,6 +103,9 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                             categoryList = response.body();
                             ArrayAdapter<CategoryDto> adapter = new ArrayAdapter<>(getBaseContext(), R.layout.spinner, categoryList);
                             categorySpinner.setAdapter(adapter);
+                            if(nonNull(advertisement)) {
+                                categorySpinner.setSelection(categoryList.indexOf(categoryList.stream().filter(category -> category.getId().equals(advertisement.getCategory().getId())).findFirst().orElseThrow()));
+                            }
                         }
                         else {
                             Log.i("Categories", "Fetching categories failed with code " + response.code());
@@ -111,7 +138,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                         if(response.code() == 201) {
                             Log.e("Advertisement", "Successful saving");
                             Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
-                            NavUtils.navigateUpFromSameTask(getParent());
+                            navigate();
                         }
                         else {
                             Log.e("Advertisement", "Error during saving");
@@ -121,10 +148,49 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<Long> call, Throwable t) {
-                        Log.e("Categories", "No connection");
+                        Log.e("Advertisement", "No connection");
                         Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void update() {
+        AppConfiguration.advertisementClient()
+                .updateAdvertisement(
+                        AdvertisementRequestDto.builder()
+                                .id(advertisement.getId())
+                                .heading(titleTextInputLayout.getEditText().getText().toString())
+                                .text(descriptionTextInputLayout.getEditText().getText().toString())
+                                .url(urlTextInputLayout.getEditText().getText().toString())
+                                .contacts(contactsTextInputLayout.getEditText().getText().toString())
+                                .categoryId(categoryList.get(categorySpinner.getSelectedItemPosition()).getId())
+                                .build()
+                )
+                .enqueue(new Callback<>() {
+
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.code() == 200) {
+                            Log.e("Advertisement", "Successful saving");
+                            Snackbar.make(coordinatorLayout, R.string.successful_saving, Snackbar.LENGTH_SHORT).show();
+                            navigate();
+                        }
+                        else {
+                            Log.e("Advertisement", "Error during saving");
+                            Snackbar.make(coordinatorLayout, R.string.error_during_saving, Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("Advertisement", "No connection");
+                        Snackbar.make(coordinatorLayout, R.string.no_connection, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void navigate() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 
 }
