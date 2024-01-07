@@ -26,7 +26,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/titleTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textColorHint="@color/primaryText"
+                app:boxStrokeColor="@color/darkPrimaryColor"
+                app:counterTextColor="@color/darkPrimaryColor"
+                app:endIconTint="@color/darkPrimaryColor"
+                app:helperTextTextColor="@color/darkPrimaryColor"
+                app:hintTextColor="@color/darkPrimaryColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/titleTextInputEditText"
@@ -40,7 +46,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textColorHint="@color/primaryText"
+                app:boxStrokeColor="@color/darkPrimaryColor"
+                app:counterTextColor="@color/darkPrimaryColor"
+                app:endIconTint="@color/darkPrimaryColor"
+                app:helperTextTextColor="@color/darkPrimaryColor"
+                app:hintTextColor="@color/darkPrimaryColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/descriptionTextInputEditText"
@@ -54,7 +66,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/urlTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textColorHint="@color/primaryText"
+                app:boxStrokeColor="@color/darkPrimaryColor"
+                app:counterTextColor="@color/darkPrimaryColor"
+                app:endIconTint="@color/darkPrimaryColor"
+                app:helperTextTextColor="@color/darkPrimaryColor"
+                app:hintTextColor="@color/darkPrimaryColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/urlTextInputEditText"
@@ -68,7 +86,13 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/contactsTextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:textColorHint="@color/primaryText"
+                app:boxStrokeColor="@color/darkPrimaryColor"
+                app:counterTextColor="@color/darkPrimaryColor"
+                app:endIconTint="@color/darkPrimaryColor"
+                app:helperTextTextColor="@color/darkPrimaryColor"
+                app:hintTextColor="@color/darkPrimaryColor">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/contactsTextInputEditText"
