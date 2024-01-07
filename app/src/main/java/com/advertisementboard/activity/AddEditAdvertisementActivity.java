@@ -1,17 +1,17 @@
 package com.advertisementboard.activity;
 
-import android.content.Intent;
 import static java.util.Objects.nonNull;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.NavUtils;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddEditAdvertisementActivity extends AppCompatActivity {
+
     private ActivityAddEditAdvertisementBinding binding;
 
     private CoordinatorLayout coordinatorLayout;
@@ -121,6 +122,18 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getOnBackPressedDispatcher().onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadCategoriesSpiner() {
@@ -248,7 +261,9 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
                                     response.body()
                             );
 
-                            recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
+                            if(nonNull(recyclerViewCategories)) {
+                                recyclerViewCategories.setAdapter(categoriesAdapter); // Назначение адаптера
+                            }
                         }
                         else {
                             Log.i("Categories", "Fetching categories failed with code " + response.code());
@@ -272,7 +287,7 @@ public class AddEditAdvertisementActivity extends AppCompatActivity {
     }
 
     private void navigate() {
-        NavUtils.navigateUpFromSameTask(this);
+        getOnBackPressedDispatcher().onBackPressed();
     }
 
     private void createCategory(CategoryDto category) {

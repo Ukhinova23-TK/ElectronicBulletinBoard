@@ -5,6 +5,7 @@ import static java.util.Objects.nonNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -112,6 +113,19 @@ public class ViewActivity extends AppCompatActivity {
 
         processButtons();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getOnBackPressedDispatcher().onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void processButtons() {
 
