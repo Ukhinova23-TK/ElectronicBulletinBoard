@@ -16,13 +16,16 @@ import com.advertisementboard.account.DialogListener;
 import com.advertisementboard.adapter.AdvertisementsAdapter;
 import com.advertisementboard.adapter.CategoriesAdapter;
 import com.advertisementboard.config.AppConfiguration;
+import com.advertisementboard.data.dto.advertisement.AdvertisementDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageRequestDto;
 import com.advertisementboard.data.dto.advertisement.AdvertisementPageResponseDto;
 import com.advertisementboard.data.dto.category.CategoryDto;
+import com.advertisementboard.data.enumeration.AdvertisementStatus;
 import com.advertisementboard.databinding.ActivityAdvertisementsBinding;
 import com.advertisementboard.decoration.ItemDivider;
 import com.advertisementboard.fragment.AddEditCategoryFragment;
 import com.advertisementboard.fragment.DeleteDialogFragment;
+import com.advertisementboard.util.RoleUtil;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -127,6 +130,10 @@ public class AdvertisementsActivity extends AppCompatActivity {
                     public void onResponse(Call<AdvertisementPageResponseDto> call, Response<AdvertisementPageResponseDto> response) {
                         if(response.code() == 200) {
                             // создание адаптера recyclerView и слушателя щелчков на элементах
+                            List<AdvertisementDto> advertisements = response.body().getAdvertisements();
+                            if(!RoleUtil.isModerator(AppConfiguration.user())) {
+                                advertisements = advertisements.stream().filter(advertisementDto -> advertisementDto.getStatus() != AdvertisementStatus.REJECTED).toList();
+                            }
                             advertisementsAdapter = new AdvertisementsAdapter(
                                     advertisement -> {
                                         Intent intent = new Intent(getBaseContext(), ViewActivity.class);
@@ -152,7 +159,7 @@ public class AdvertisementsActivity extends AppCompatActivity {
                                         );
                                         fragment.show(getSupportFragmentManager(), "Delete advertisement");
                                     },
-                                    response.body().getAdvertisements(),
+                                    advertisements,
                                     getBaseContext()
                             );
 
